@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'pages/all-styles.page.dart';
+import 'pages/custom-embeded.page.dart';
 import 'pages/custom-toolbar.page.dart';
 import 'pages/delta-sandbox.page.dart';
 import 'pages/highlights.page.dart';
@@ -23,13 +24,14 @@ class DemoApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Visual Editor Demo',
-      initialRoute: '/all-styles',
+      initialRoute: '/custom-embeded',
 
       // TODO Add examples for:
       // Custom styles
       // Highlights
       // Exposed utils
       routes: {
+        '/custom-embeded': (context) => CustomEmbededPage(),
         '/all-styles': (context) => AllStylesPage(),
         '/read-only': (context) => ReadOnlyPage(),
         '/multiple-editors': (context) => MultipleEditorsPage(),

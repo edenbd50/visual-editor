@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:editorapp/pages/custom_embed_builder.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,16 +13,18 @@ import '../widgets/demo-scaffold.dart';
 import '../widgets/loading.dart';
 
 // Demo of all the styles that can be applied to a document.
-class AllStylesPage extends StatefulWidget {
+class CustomEmbededPage extends StatefulWidget {
   @override
-  _AllStylesPageState createState() => _AllStylesPageState();
+  _CustomEmbededPageState createState() => _CustomEmbededPageState();
 }
 
-class _AllStylesPageState extends State<AllStylesPage> {
+class _CustomEmbededPageState extends State<CustomEmbededPage> {
   final _editorService = EditorService();
 
   EditorController? _controller;
   final FocusNode _focusNode = FocusNode();
+
+  static int index = 0;
 
   @override
   void initState() {
@@ -62,7 +65,8 @@ class _AllStylesPageState extends State<AllStylesPage> {
               scrollController: ScrollController(),
               focusNode: _focusNode,
               config: EditorConfigM(
-                placeholder: 'Enter text',
+                placeholder: 'הקלד..',
+                embedBuilder: customEmbedBuilder,
               ),
             ),
           ),
@@ -81,19 +85,72 @@ class _AllStylesPageState extends State<AllStylesPage> {
         // mediaPickSettingSelector: _editorService.selectMediaPickSettingE,
         showAlignmentButtons: true,
         multiRowsDisplay: false,
+        showMarkers: true,
+        customIcons: [
+          EditorCustomButtonM(
+              icon: Icons.tag,
+              onTap: () {
+                setState(() {
+                  var editorController = _controller;
+
+                  /// Append space from the start
+                  editorController?.document
+                      .insert(editorController.selection.start, " ");
+
+                  /// Replace text with tag
+                  editorController?.document.insert(
+                      editorController.selection.start + 1,
+
+                      /// hashtag from button
+                      EmbeddableM.fromJson({
+                        'hashtag': HashTagObject(
+                          tagTitle: "${index++}",
+                          bgColor: getbankColor(),
+                          textColor: Colors.black,
+                          data: {"val": 'Hey there'},
+                        ).toJsonObject(),
+                      }));
+
+                  /// Append space to the end
+                  editorController?.document
+                      .insert(editorController.selection.start + 2, " ");
+
+                  editorController?.moveCursorToPosition(
+                      editorController.selection.start + 3);
+                });
+              })
+        ],
       );
 
   Future<void> _loadDocument() async {
-    final result = await rootBundle.loadString(
-      'assets/docs/all-styles.json',
-    );
-    final document = DocumentM.fromJson(jsonDecode(result));
-
+    // final result = await rootBundle.loadString(
+    //   'assets/docs/custom-embeded.json',
+    // );
+    // final document = DocumentM.fromJson(jsonDecode(result));
+     final document = DocumentM();
     setState(() {
       _controller = EditorController(
         document: document,
-        highlights: SAMPLE_HIGHLIGHTS,
       );
+      _controller?.document.changes.listen((event) {
+        print(_controller?.document.toDelta().toJson());
+      });
     });
+  }
+
+  List<Color> colors = [
+    Colors.redAccent,
+    Colors.blueAccent,
+    Colors.yellowAccent,
+    Colors.greenAccent,
+    Colors.cyanAccent,
+    Colors.purpleAccent,
+    Colors.pinkAccent,
+    Colors.black
+  ];
+
+  getbankColor() {
+    colors.shuffle();
+    return colors[0];
   }
 }

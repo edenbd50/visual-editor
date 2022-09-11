@@ -159,7 +159,7 @@ class _TextLineState extends State<TextLine> {
     }
 
     // The line could contain more than one Embed & more than one Text
-    final textSpanChildren = <InlineSpan>[];
+    var textSpanChildren = <InlineSpan>[];
     var textNodes = LinkedList<NodeM>();
 
     for (final child in widget.line.children) {
@@ -205,6 +205,22 @@ class _TextLineState extends State<TextLine> {
       textSpanChildren.add(
         _textSpanFromNodes(widget.styles, textNodes, lineStyle),
       );
+    }
+
+    /// WidgetSpans in RTL text lazying out LTR if they occur on the same line #54400
+    /// https://github.com/flutter/flutter/issues/54400
+    if(widget.textDirection == TextDirection.rtl) {
+      /// Find all WidgetSpans
+      final widgetList = textSpanChildren
+          .whereType<WidgetSpan>()
+          .toList();
+      /// Re-map spanChildren and Reverse only the WidgetSpan.
+      textSpanChildren = textSpanChildren.map((spanElement) {
+        if (spanElement is WidgetSpan) {
+          spanElement = widgetList.removeLast();
+        }
+        return spanElement;
+      }).toList();
     }
 
     // Return all the child text spans in a parent text span.
