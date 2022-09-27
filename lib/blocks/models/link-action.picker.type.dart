@@ -15,3 +15,16 @@ typedef LinkActionPickerDelegate = Future<LinkMenuAction> Function(
   String link,
   NodeM node,
 );
+
+
+// Used internally by widget layer.
+typedef TagActionPicker = Future<TagMenuAction> Function(
+    NodeM linkNode,
+    EditorState state,
+    );
+
+typedef TagActionPickerDelegate = Future<TagMenuAction> Function(
+    BuildContext context,
+    String link,
+    NodeM node,
+    );

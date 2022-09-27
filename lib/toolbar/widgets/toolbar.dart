@@ -364,7 +364,7 @@ class EditorToolbar extends StatelessWidget implements PreferredSizeWidget {
             showRightAlignment: showRightAlignment,
             showJustifyAlignment: showJustifyAlignment,
           ),
-        if (showDirection)
+        // if (showDirection)
           ToggleStyleButton(
             attribute: AttributesAliasesM.rtl,
             buttonsSpacing: toolbarSectionSpacing,
@@ -465,6 +465,13 @@ class EditorToolbar extends StatelessWidget implements PreferredSizeWidget {
           _divider(),
         if (showLink)
           LinkStyleButton(
+            controller: controller,
+            iconSize: toolbarIconSize,
+            buttonsSpacing: toolbarSectionSpacing,
+            iconTheme: iconTheme,
+            dialogTheme: dialogTheme,
+          ),
+        TagStyleButton(
             controller: controller,
             iconSize: toolbarIconSize,
             buttonsSpacing: toolbarSectionSpacing,

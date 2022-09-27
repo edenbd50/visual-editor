@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../documents/models/attributes/attributes.model.dart';
 import '../../documents/models/nodes/embed.model.dart';
@@ -36,6 +37,7 @@ class TextLine extends StatefulWidget {
   final TextDirection? textDirection;
   final EditorStylesM styles;
   final LinkActionPicker linkActionPicker;
+  final TagActionPicker tagActionPicker;
 
   // Used internally to retrieve the state from the EditorController instance to which this button is linked to.
   // Can't be accessed publicly (by design) to avoid exposing the internals of the library.
@@ -49,6 +51,7 @@ class TextLine extends StatefulWidget {
     required this.line,
     required this.styles,
     required this.linkActionPicker,
+    required this.tagActionPicker,
     required EditorState state,
     this.textDirection,
     Key? key,
@@ -63,10 +66,12 @@ class TextLine extends StatefulWidget {
 class _TextLineState extends State<TextLine> {
   final _textLineStylesUtils = TextLineStyleUtils();
   final _textLineLinkUtils = TextLineLinkUtils();
+  final _textLineTagUtils = TextLineTagUtils();
 
   bool _metaOrControlPressed = false;
   UniqueKey _richTextKey = UniqueKey();
   final _linkRecognizers = <NodeM, GestureRecognizer>{};
+  final _tagRecognizers = <NodeM, GestureRecognizer>{};
   StreamSubscription? _pressedKeysListener;
   late EmbedBuilder _embedBuilder;
 
@@ -81,6 +86,9 @@ class _TextLineState extends State<TextLine> {
   void dispose() {
     _pressedKeysListener?.cancel();
     _linkRecognizers
+      ..forEach((key, value) => value.dispose())
+      ..clear();
+    _tagRecognizers
       ..forEach((key, value) => value.dispose())
       ..clear();
     super.dispose();
@@ -273,11 +281,45 @@ class _TextLineState extends State<TextLine> {
     final nodeStyle = textNode.style;
     final isLink = nodeStyle.containsKey(AttributesM.link.key) &&
         nodeStyle.attributes[AttributesM.link.key]!.value != null;
+
+    final isTag = nodeStyle.containsKey(AttributesM.tag.key) &&
+        nodeStyle.attributes[AttributesM.tag.key]!.value != null;
+
     final canLaunchLink = isLink &&
         _textLineLinkUtils.canLaunchLinks(
           widget._state,
           _metaOrControlPressed,
         );
+
+    final canLaunchTag = isTag &&
+        _textLineLinkUtils.canLaunchLinks(
+          widget._state,
+          _metaOrControlPressed,
+        );
+    GestureRecognizer? recognizer = null;
+    if(isLink && canLaunchLink){
+      recognizer = _textLineLinkUtils.getRecognizer(
+        node,
+        widget._state,
+        widget.linkActionPicker,
+        _linkRecognizers,
+      );
+    }else if(isTag && canLaunchTag){
+      recognizer = _textLineTagUtils.getRecognizer(
+        node,
+        widget._state,
+        widget.tagActionPicker,
+        _tagRecognizers,
+      );
+    }
+
+    SystemMouseCursor? mouseDisplay = null;
+    if(canLaunchLink){
+      mouseDisplay = SystemMouseCursors.click;
+    }else if ( canLaunchTag){
+      mouseDisplay = SystemMouseCursors.click;
+
+    }
 
     return TextSpan(
       text: textNode.value,
@@ -287,17 +329,11 @@ class _TextLineState extends State<TextLine> {
         nodeStyle,
         lineStyle,
         isLink,
+        isTag,
         widget._state,
       ),
-      recognizer: canLaunchLink
-          ? _textLineLinkUtils.getRecognizer(
-              node,
-              widget._state,
-              widget.linkActionPicker,
-              _linkRecognizers,
-            )
-          : null,
-      mouseCursor: canLaunchLink ? SystemMouseCursors.click : null,
+      recognizer: recognizer,
+      mouseCursor: mouseDisplay,
     );
   }
 

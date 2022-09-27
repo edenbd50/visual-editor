@@ -89,6 +89,10 @@ class EditorConfigM {
   // Callback to invoke when user wants to launch a URL.
   final ValueChanged<String>? onLaunchUrl;
 
+
+  // Callback to invoke when user wants to launch a URL.
+  final ValueChanged<String>? onTagClicked;
+
   // Returns whether gesture is handled
   final bool Function(
     TapDownDetails details,
@@ -136,6 +140,14 @@ class EditorConfigM {
   // For Android, the menu is displayed with showModalBottomSheet and a list of Material ListTiles.
   final LinkActionPickerDelegate? linkActionPickerDelegate;
 
+  // Delegate function responsible for showing menu with link actions on mobile platforms (iOS, Android).
+  // The menu is triggered in editing mode when the user long-presses a link-styled text segment.
+  // VisualEditor provides default implementation which can be overridden by this field to customize the user experience.
+  // By default on iOS the menu is displayed with showCupertinoModalPopup which constructs an instance of CupertinoActionSheet.
+  // For Android, the menu is displayed with showModalBottomSheet and a list of Material ListTiles.
+  final TagActionPickerDelegate? tagActionPickerDelegate;
+
+
   // A floating cursor will help you to see what is currently under your thumb when moving the caret.
   final bool floatingCursorDisabled;
 
@@ -146,7 +158,8 @@ class EditorConfigM {
   final TextSelectionControls? textSelectionControls;
 
   // Customize any of the settings available  in VisualEditor
-  const EditorConfigM({
+  const EditorConfigM( {
+    this.onTagClicked,
     this.scrollable = true,
     this.padding = EdgeInsets.zero,
     this.autoFocus = false,
@@ -171,6 +184,7 @@ class EditorConfigM {
     this.onSingleLongTapEnd,
     this.embedBuilder = defaultEmbedBuilder,
     this.linkActionPickerDelegate = defaultLinkActionPickerDelegate,
+    this.tagActionPickerDelegate = defaultTagActionPickerDelegate,
     this.customStyleBuilder,
     this.locale,
     this.floatingCursorDisabled = false,

@@ -115,3 +115,114 @@ class _LinkStyleDialogState extends State<LinkStyleDialog> {
     );
   }
 }
+
+class TagStyleDialog extends StatefulWidget {
+  final EditorDialogThemeM? dialogTheme;
+  final String? tag;
+  final String? text;
+
+  const TagStyleDialog({
+    this.dialogTheme,
+    this.tag,
+    this.text,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _TagStyleDialogState createState() => _TagStyleDialogState();
+}
+
+class _TagStyleDialogState extends State<TagStyleDialog> {
+  late String _tag;
+  late String _text;
+  late TextEditingController _tagController;
+  late TextEditingController _textController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tag = widget.tag ?? '';
+    _text = widget.text ?? '';
+    _tagController = TextEditingController(text: _tag);
+    _textController = TextEditingController(text: _text);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: widget.dialogTheme?.dialogBackgroundColor,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 8),
+          TextField(
+            keyboardType: TextInputType.multiline,
+            style: widget.dialogTheme?.inputTextStyle,
+            decoration: InputDecoration(
+                labelText: 'Text'.i18n,
+                labelStyle: widget.dialogTheme?.labelTextStyle,
+                floatingLabelStyle: widget.dialogTheme?.labelTextStyle),
+            autofocus: true,
+            onChanged: _textChanged,
+            controller: _textController,
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            keyboardType: TextInputType.multiline,
+            style: widget.dialogTheme?.inputTextStyle,
+            decoration: InputDecoration(
+                labelText: 'Tag'.i18n,
+                labelStyle: widget.dialogTheme?.labelTextStyle,
+                floatingLabelStyle: widget.dialogTheme?.labelTextStyle),
+            autofocus: true,
+            onChanged: _tagChanged,
+            controller: _tagController,
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: _canPress() ? _applyTag : null,
+          child: Text(
+            'Ok'.i18n,
+            style: widget.dialogTheme?.labelTextStyle,
+          ),
+        ),
+      ],
+    );
+  }
+
+  bool _canPress() {
+    if (_text.isEmpty || _tag.isEmpty) {
+      return false;
+    }
+
+    if (!AutoFormatMultipleTagRule.tagRegExp.hasMatch(_tag)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  void _tagChanged(String value) {
+    setState(() {
+      _tag = value;
+    });
+  }
+
+  void _textChanged(String value) {
+    setState(() {
+      _text = value;
+    });
+  }
+
+  void _applyTag() {
+    Navigator.pop(
+      context,
+      TagButtonM(
+        _text.trim(),
+        _tag.trim(),
+      ),
+    );
+  }
+}

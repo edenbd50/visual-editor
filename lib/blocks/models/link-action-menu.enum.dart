@@ -12,3 +12,16 @@ enum LinkMenuAction {
   // No-op
   none,
 }
+enum TagMenuAction {
+  // Launch the link
+  launch,
+
+  // Copy to clipboard
+  copy,
+
+  // Remove link style attribute
+  remove,
+
+  // No-op
+  none,
+}

@@ -9,6 +9,7 @@ extension Localization on String {
           'Select Color': 'Select Color',
           'Gallery': 'Gallery',
           'Link': 'Link',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'Please first select some text to transform into a link.',
           'Open': 'Open',
@@ -29,6 +30,7 @@ extension Localization on String {
           'Select Color': 'Select Color',
           'Gallery': 'Gallery',
           'Link': 'Link',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'Please first select some text to transform into a link.',
           'Open': 'Open',
@@ -49,6 +51,7 @@ extension Localization on String {
           'Select Color': 'اختار اللون',
           'Gallery': 'الصور',
           'Link': 'الرابط',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'يرجى اختيار نص للتحويل إلى رابط',
           'Open': 'فتح',
@@ -69,6 +72,7 @@ extension Localization on String {
           'Select Color': 'Vælg farve',
           'Gallery': 'Galleri',
           'Link': 'Link',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'Vælg venligst først noget tekst for at lave det om til et link.',
           'Open': 'Åben',
@@ -89,6 +93,7 @@ extension Localization on String {
           'Select Color': 'Farbe auswählen',
           'Gallery': 'Gallerie',
           'Link': 'Link',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'Markiere bitte zuerst einen Text, um diesen in einen Link zu '
                   'verwandeln.',
@@ -110,6 +115,7 @@ extension Localization on String {
           'Select Color': 'Choisir une couleur',
           'Gallery': 'Galerie',
           'Link': 'Lien',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               "Veuillez d'abord sélectionner un texte à transformer en lien.",
           'Open': 'Ouverte',
@@ -130,6 +136,7 @@ extension Localization on String {
           'Select Color': '选择颜色',
           'Gallery': '相簿',
           'Link': '链接',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               '请先选择一些要转化为链接的文本',
           'Open': '打开',
@@ -150,6 +157,7 @@ extension Localization on String {
           'Select Color': '색상 선택',
           'Gallery': '갤러리',
           'Link': '링크',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               '링크로 전환할 글자를 먼저 선택해주세요.',
           'Open': '열기',
@@ -170,6 +178,7 @@ extension Localization on String {
           'Select Color': 'Выбрать цвет',
           'Gallery': 'Галерея',
           'Link': 'Ссылка',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'Выделите часть текста для создания ссылки.',
           'Open': 'Открыть',
@@ -190,6 +199,7 @@ extension Localization on String {
           'Select Color': 'Selecciona un color',
           'Gallery': 'Galeria',
           'Link': 'Enlace',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'Por favor selecciona primero un texto para transformarlo '
                   'en un enlace',
@@ -211,6 +221,7 @@ extension Localization on String {
           'Select Color': 'Renk Seçin',
           'Gallery': 'Galeri',
           'Link': 'Bağlantı',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'Lütfen bağlantıya dönüştürmek için bir metin seçin.',
           'Open': 'Açık',
@@ -251,6 +262,7 @@ extension Localization on String {
           'Select Color': 'Selecionar uma cor',
           'Gallery': 'Galeria',
           'Link': 'Link',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'Por favor selecione primeiro um texto para '
                   'transformá-lo em um link',
@@ -272,6 +284,7 @@ extension Localization on String {
           'Select Color': 'Wybierz kolor',
           'Gallery': 'Galeria',
           'Link': 'Link',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'Na początku zaznacz tekst aby zamienić go w link.',
           'Open': 'Otwórz',
@@ -293,6 +306,7 @@ extension Localization on String {
           'Select Color': 'Chọn Màu',
           'Gallery': 'Thư viện',
           'Link': 'Liên kết',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'Vui lòng chọn trước phần chữ cần đổi thành liên kết',
           'Open': 'Mở',
@@ -314,6 +328,7 @@ extension Localization on String {
           'Select Color': 'رنگ منتخب کریں',
           'Gallery': 'گیلری',
           'Link': 'لنک',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'براہ کرم لنک میں تبدیل کرنے کے لیے پہلے کچھ متن منتخب کریں۔',
           'Open': 'کھولیں',
@@ -334,6 +349,7 @@ extension Localization on String {
           'Select Color': 'Pilih Warna',
           'Gallery': 'Galeri',
           'Link': 'Tautan',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'Silakan pilih dulu beberapa teks untuk diubah menjadi tautan.',
           'Open': 'Buka',
@@ -354,6 +370,7 @@ extension Localization on String {
           'Select Color': 'Velg farge',
           'Gallery': 'Galleri',
           'Link': 'Lenke',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'Velg først litt tekst for å forvandle til en lenke.',
           'Open': 'Åpne',
@@ -374,6 +391,7 @@ extension Localization on String {
           'Select Color': 'انتخاب رنگ',
           'Gallery': 'گالری',
           'Link': 'لینک',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'لطفا ابتدا متنی را برای تبدیل به لینک انتخاب کنید.',
           'Open': 'باز کردن',
@@ -394,6 +412,7 @@ extension Localization on String {
           'Select Color': 'रंग चुनें',
           'Gallery': 'गैलरी',
           'Link': 'लिंक',
+          'Tag': 'tag',
           'Please first select some text to transform into a link.':
               'लिंक में बदलने के लिए कृपया पहले कुछ शब्द चुनें।',
           'Open': 'खोलें',

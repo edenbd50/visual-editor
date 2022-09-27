@@ -19,6 +19,7 @@ class EditorStylesM {
   final TextStyle? sizeLarge;
   final TextStyle? sizeHuge;
   final TextStyle? link;
+  final TextStyle? tag;
   final Color? color;
   final TextBlockStyleM? placeHolder;
   final ListBlockStyle? lists;
@@ -40,6 +41,7 @@ class EditorStylesM {
     this.strikeThrough,
     this.inlineCode,
     this.link,
+    this.tag,
     this.color,
     this.placeHolder,
     this.lists,
@@ -65,6 +67,7 @@ class EditorStylesM {
         strikeThrough: other.strikeThrough ?? strikeThrough,
         inlineCode: other.inlineCode ?? inlineCode,
         link: other.link ?? link,
+        tag: other.tag ?? tag,
         color: other.color ?? color,
         placeHolder: other.placeHolder ?? placeHolder,
         lists: other.lists ?? lists,

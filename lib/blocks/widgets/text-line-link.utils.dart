@@ -60,6 +60,12 @@ class TextLineLinkUtils {
     _tapLink(link, state);
   }
 
+  void _tapNodeTag(NodeM node, EditorState state) {
+    final link = node.style.attributes[AttributesM.tag.key]!.value;
+
+    _tapTag(link, state);
+  }
+
   void _tapLink(String? link, EditorState state) {
     if (link == null) {
       return;
@@ -77,6 +83,27 @@ class TextLineLinkUtils {
     }
 
     launchUrl(link);
+  }
+
+
+  void _tapTag(String? link, EditorState state) {
+    if (link == null) {
+      return;
+    }
+
+    var launchUrl = state.editorConfig.config.onTagClicked;
+    launchUrl ??= _launchUrl;
+
+    link = link.trim();
+
+    if (!linkPrefixes.any(
+          (linkPrefix) => link!.toLowerCase().startsWith(linkPrefix),
+    )) {
+      link = 'https://$link';
+    }
+
+    launchUrl(link);
+    print('tag pressed');
   }
 
   Future<void> _longPressLink(
@@ -109,6 +136,109 @@ class TextLineLinkUtils {
         break;
 
       case LinkMenuAction.none:
+        break;
+    }
+  }
+}
+
+// Links can either be opened or copied.
+class TextLineTagUtils {
+  bool canLaunchTags(EditorState state, bool metaOrControlPressed) {
+    // In readOnly mode users can launch tags  by simply tapping (clicking) on them
+    if (state.editorConfig.config.readOnly) return true;
+
+    // In editing mode it depends on the platform:
+    // Desktop platforms (macos, linux, windows):
+    // only allow Meta(Control) + Click combinations
+    if (isDesktop()) {
+      return metaOrControlPressed;
+    }
+    // Mobile platforms (ios, android): always allow but we install a  long-press handler instead of a tap one.
+    // LongPress is followed by a context menu with actions.
+    return true;
+  }
+
+  // Cache gesture recognizers so we can cancel them later.
+  GestureRecognizer getRecognizer(
+      NodeM node,
+      EditorState state,
+      TagActionPicker tagActionPicker,
+      Map<NodeM, GestureRecognizer> tagRecognizers,
+      ) {
+    if (tagRecognizers.containsKey(node)) {
+      return tagRecognizers[node]!;
+    }
+
+    if (isDesktop() || state.editorConfig.config.readOnly) {
+      tagRecognizers[node] = TapGestureRecognizer()
+        ..onTap = () => _tapNodeTag(node, state);
+    } else {
+      tagRecognizers[node] = LongPressGestureRecognizer()
+        ..onLongPress = () => _longPressTag(node, state, tagActionPicker);
+    }
+
+    return tagRecognizers[node]!;
+  }
+
+  Future<void> _launchUrl(String url) async {
+    await launchUrl(Uri.parse(url));
+  }
+
+  void _tapNodeTag(NodeM node, EditorState state) {
+    final tag = node.style.attributes[AttributesM.tag.key]!.value;
+
+    _tapTag(tag, state);
+  }
+
+  void _tapTag(String? tag, EditorState state) {
+    if (tag == null) {
+      return;
+    }
+
+    var tagClicked = state.editorConfig.config.onTagClicked;
+    tagClicked ??= _launchUrl;
+
+    tag = tag.trim();
+    //
+    // if (!tagPrefixes.any(
+    //       (tagPrefix) => tag!.toLowerCase().startsWith(tagPrefix),
+    // )) {
+    //   tag = 'https://$tag';
+    // }
+
+    tagClicked(tag);
+  }
+
+  Future<void> _longPressTag(
+      NodeM node,
+      EditorState state,
+      TagActionPicker tagActionPicker,
+      ) async {
+    final tag = node.style.attributes[AttributesM.tag.key]!.value!;
+    final action = await tagActionPicker(node, state);
+
+    switch (action) {
+      case TagMenuAction.launch:
+        _tapTag(tag, state);
+        break;
+
+      case TagMenuAction.copy:
+      // ignore: unawaited_futures
+        Clipboard.setData(
+          ClipboardData(text: tag),
+        );
+        break;
+
+      case TagMenuAction.remove:
+        final range = getTagRange(node);
+        state.refs.editorController.formatText(
+          range.start,
+          range.end - range.start,
+          AttributesM.tag,
+        );
+        break;
+
+      case TagMenuAction.none:
         break;
     }
   }

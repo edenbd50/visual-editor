@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:text_scroll/text_scroll.dart';
 import 'package:visual_editor/visual-editor.dart';
 import 'package:visual_editor/controller/controllers/editor-controller.dart';
 import 'package:visual_editor/documents/models/attributes/attributes.model.dart';
@@ -33,21 +36,33 @@ Widget customEmbedBuilder(
     case 'hashtag':
       print('${node.value.data}');
       HashTagObject tagObject = HashTagObject.fromJson(node.value.data);
-      return SizedBox(
+      return IntrinsicWidth(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
           decoration: BoxDecoration(
-              color: tagObject.bgColor,
-              borderRadius: BorderRadius.circular(9.0)),
+            borderRadius: BorderRadius.circular(12.0),
+            color: tagObject.bgColor,
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
           child: InkWell(
             onTap: () async {
               print('${tagObject.toString()}');
             },
-            child: Text(
-              "#${tagObject.tagTitle}",
-              style: TextStyle(color: tagObject.textColor),
-              overflow: TextOverflow.ellipsis,
+            child: Center(
+              child: TextScroll(
+                "${tagObject.tagTitle}#",
+                mode: TextScrollMode.endless,
+                velocity: Velocity(pixelsPerSecond: Offset(50, 0)),
+                delayBefore: Duration(milliseconds: 500),
+                style: TextStyle(color: tagObject.textColor),
+                textDirection: Directionality.of(context),
+                selectable: true,
+              ),
             ),
+            // child: Text(
+            //   "${tagObject.tagTitle}#",
+            //   style: TextStyle(color: tagObject.textColor),
+            //   overflow: TextOverflow.ellipsis,
+            // ),
           ),
         ),
       );

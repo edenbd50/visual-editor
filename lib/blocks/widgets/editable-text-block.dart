@@ -24,6 +24,7 @@ class EditableTextBlock extends StatelessWidget {
   final bool hasFocus;
   bool isCodeBlock = false;
   final LinkActionPicker linkActionPicker;
+  final TagActionPicker tagActionPicker;
   final Map<int, int> indentLevelCounts;
   final Function(int, bool) onCheckboxTap;
 
@@ -44,6 +45,7 @@ class EditableTextBlock extends StatelessWidget {
     required this.hasFocus,
     required this.isCodeBlock,
     required this.linkActionPicker,
+    required this.tagActionPicker,
     required this.indentLevelCounts,
     required this.onCheckboxTap,
     required EditorState state,
@@ -120,6 +122,7 @@ class EditableTextBlock extends StatelessWidget {
           styles: styles,
           linkActionPicker: linkActionPicker,
           state: _state,
+          tagActionPicker: tagActionPicker,
         ),
         indentWidth: _getIndentWidth(),
         verticalSpacing: _getSpacingForLine(
@@ -275,8 +278,7 @@ class EditableTextBlock extends StatelessWidget {
           throw 'Invalid level $level';
       }
     } else {
-      late VerticalSpacing lineSpacing;
-
+      var lineSpacing = VerticalSpacing(top: 0, bottom: 0);
       // TODO Convert to switch
       if (attrs.containsKey(AttributesM.blockQuote.key)) {
         lineSpacing = defaultStyles!.quote!.lineSpacing;

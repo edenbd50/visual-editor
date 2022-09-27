@@ -53,3 +53,51 @@ class AutoFormatLinksRule extends InsertRuleM {
     }
   }
 }
+
+// Applies link format to text segment (which looks like a link) when user inserts space character after it.
+class AutoFormatTagRule extends InsertRuleM {
+  const AutoFormatTagRule();
+
+  @override
+  DeltaM? applyRule(
+    DeltaM document,
+    int index, {
+    int? len,
+    Object? data,
+    AttributeM? attribute,
+  }) {
+    if (data is! String || data != ' ') {
+      return null;
+    }
+
+    final itr = DeltaIterator(document);
+    final prev = itr.skip(index);
+
+    if (prev == null || prev.data is! String) {
+      return null;
+    }
+
+    try {
+      final cand = (prev.data as String).split('\n').last.split(' ').last;
+
+      if (!data.startsWith('#')) {
+        return null;
+      }
+
+      final attributes = prev.attributes ?? <String, dynamic>{};
+
+      if (attributes.containsKey(AttributesM.tag.key)) {
+        return null;
+      }
+
+      attributes.addAll(TagAttributeM(data.toString()).toJson());
+
+      return DeltaM()
+        ..retain(index + (len ?? 0) - cand.length)
+        ..retain(cand.length, attributes)
+        ..insert(data, prev.attributes);
+    } on FormatException {
+      return null;
+    }
+  }
+}

@@ -18,7 +18,13 @@
     }
   },
   {
-    "insert": ".\n\nCustom highlights"
+    "insert": "Dam Square",
+    "attributes": {
+      "tag": "Dam Square"
+    }
+  },
+  {
+    "insert": ".\n\nCustom #highlights"
   },
   {
     "insert": "\n",

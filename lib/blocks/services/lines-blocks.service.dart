@@ -33,6 +33,7 @@ class LinesBlocksService {
       styles: state.styles.styles,
       linkActionPicker: linkActionPicker,
       state: state,
+      tagActionPicker: tagActionPicker,
     );
 
     final editableTextLine = EditableTextLine(
@@ -90,6 +91,19 @@ class LinesBlocksService {
       state.refs.editorState.context,
       link,
       linkNode,
+    );
+  }
+
+  Future<TagMenuAction> tagActionPicker(
+      NodeM tagNode, EditorState state) async {
+    final tag = tagNode.style.attributes[AttributesM.tag.key]!.value!;
+    final tagDelegate = state.editorConfig.config.tagActionPickerDelegate ??
+        defaultTagActionPickerDelegate;
+
+    return tagDelegate(
+      state.refs.editorState.context,
+      tag,
+      tagNode,
     );
   }
 

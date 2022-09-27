@@ -97,3 +97,99 @@ Future<LinkMenuAction> _showMaterialMenu(
 
   return result ?? LinkMenuAction.none;
 }
+
+
+
+
+
+
+
+Future<TagMenuAction> defaultTagActionPickerDelegate(
+    BuildContext context,
+    String link,
+    NodeM node,
+    ) async {
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.iOS:
+      return _showCupertinoTagMenu(context, link);
+
+    case TargetPlatform.android:
+      return _showMaterialMenuTag(context, link);
+
+    default:
+      assert(
+      false,
+      'defaultShowTagActionsMenu not supposed to '
+          'be invoked for $defaultTargetPlatform',
+      );
+
+      return TagMenuAction.none;
+  }
+}
+
+Future<TagMenuAction> _showCupertinoTagMenu(
+    BuildContext context,
+    String link,
+    ) async {
+  final result = await showCupertinoModalPopup<TagMenuAction>(
+    context: context,
+    builder: (ctx) {
+
+      return CupertinoActionSheet(
+        title: Text(link),
+        actions: [
+          CupertinoTagAction(
+            title: 'Open',
+            icon: Icons.language_sharp,
+            onPressed: () => Navigator.of(context).pop(TagMenuAction.launch),
+          ),
+          CupertinoTagAction(
+            title: 'Copy',
+            icon: Icons.copy_sharp,
+            onPressed: () => Navigator.of(context).pop(TagMenuAction.copy),
+          ),
+          CupertinoTagAction(
+            title: 'Remove',
+            icon: Icons.link_off_sharp,
+            onPressed: () => Navigator.of(context).pop(TagMenuAction.remove),
+          ),
+        ],
+      );
+    },
+  );
+  return result ?? TagMenuAction.none;
+}
+
+Future<TagMenuAction> _showMaterialMenuTag(
+    BuildContext context,
+    String link,
+    ) async {
+  final result = await showModalBottomSheet<TagMenuAction>(
+    context: context,
+    builder: (ctx) {
+
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          MaterialTagAction(
+            title: 'Open'.i18n,
+            icon: Icons.language_sharp,
+            onPressed: () => Navigator.of(context).pop(TagMenuAction.launch),
+          ),
+          MaterialTagAction(
+            title: 'Copy'.i18n,
+            icon: Icons.copy_sharp,
+            onPressed: () => Navigator.of(context).pop(TagMenuAction.copy),
+          ),
+          MaterialTagAction(
+            title: 'Remove'.i18n,
+            icon: Icons.link_off_sharp,
+            onPressed: () => Navigator.of(context).pop(TagMenuAction.remove),
+          ),
+        ],
+      );
+    },
+  );
+
+  return result ?? TagMenuAction.none;
+}

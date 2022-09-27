@@ -7,3 +7,12 @@ class LinkButtonM {
     this.link,
   );
 }
+class TagButtonM {
+  final String text;
+  final String tagValue;
+
+  TagButtonM(
+      this.text,
+      this.tagValue,
+      );
+}

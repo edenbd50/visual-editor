@@ -77,6 +77,7 @@ class TextLineStyleUtils {
     StyleM nodeStyle,
     StyleM lineStyle,
     bool isLink,
+    bool isTag,
     EditorState state,
   ) {
     var inlineStyle = const TextStyle();
@@ -89,6 +90,7 @@ class TextLineStyleUtils {
       AttributesM.italic.key: defaultStyles.italic,
       AttributesM.small.key: defaultStyles.small,
       AttributesM.link.key: defaultStyles.link,
+      AttributesM.tag.key: defaultStyles.tag,
       AttributesM.underline.key: defaultStyles.underline,
       AttributesM.strikeThrough.key: defaultStyles.strikeThrough,
     }.forEach((key, style) {
@@ -119,6 +121,11 @@ class TextLineStyleUtils {
         } else if (key == AttributesM.link.key && !isLink) {
           // null value for link should be ignored
           // i.e. nodeStyle.attributes[Attribute.link.key]!.value == null
+
+          // Tag
+         } else if (key == AttributesM.tag.key && !isTag) {
+          // null value for tag should be ignored
+          // i.e. nodeStyle.attributes[Attribute.tag.key]!.value == null
 
           // Other
         } else {

@@ -110,6 +110,7 @@ class DocumentService {
         state,
       ),
       state: state,
+      tagActionPicker: _linesBlocksService.tagActionPicker,
     );
   }
 }

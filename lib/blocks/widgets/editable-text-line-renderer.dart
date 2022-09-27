@@ -641,17 +641,21 @@ class EditableTextLineRenderer extends EditableBoxRenderer {
     PaintingContext context,
     Offset effectiveOffset,
   ) {
-    assert(highlightedRects.isNotEmpty);
-    // final isHovered = _hoveredHighlights.contains(highlight); RESTORE
-    const isHovered = false;
-    final paint = Paint()
-      ..color = isHovered ? highlight.hoverColor : highlight.color;
+    // assert(highlightedRects.isNotEmpty);
+    try {
+      // final isHovered = _hoveredHighlights.contains(highlight); RESTORE
+      const isHovered = false;
+      final paint = Paint()
+        ..color = isHovered ? highlight.hoverColor : highlight.color;
 
-    for (final box in highlightedRects) {
-      context.canvas.drawRect(
-        box.toRect().shift(effectiveOffset),
-        paint,
-      );
+      for (final box in highlightedRects) {
+        context.canvas.drawRect(
+          box.toRect().shift(effectiveOffset),
+          paint,
+        );
+      }
+    }catch(e){
+      print(e);
     }
   }
 

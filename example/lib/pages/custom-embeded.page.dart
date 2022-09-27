@@ -59,7 +59,7 @@ class _CustomEmbededPageState extends State<CustomEmbededPage> {
             right: 16,
           ),
           child: Directionality(
-            textDirection: TextDirection.rtl,
+            textDirection: TextDirection.ltr,
             child: VisualEditor(
               controller: _controller!,
               scrollController: ScrollController(),
@@ -92,42 +92,87 @@ class _CustomEmbededPageState extends State<CustomEmbededPage> {
               onTap: () {
                 setState(() {
                   var editorController = _controller;
+                  if (editorController?.selection.start ==
+                      editorController?.selection.end) {
+                    /// Append space from the start
+                    editorController?.document
+                        .insert(editorController.selection.start, " ");
 
-                  /// Append space from the start
-                  editorController?.document
-                      .insert(editorController.selection.start, " ");
+                    /// Replace text with tag
+                    editorController?.document.insert(
+                        editorController.selection.start + 1,
 
-                  /// Replace text with tag
-                  editorController?.document.insert(
-                      editorController.selection.start + 1,
+                        /// hashtag from button
+                        EmbeddableM.fromJson({
+                          'hashtag': HashTagObject(
+                            tagTitle: "${index++}",
+                            bgColor: getbankColor(),
+                            textColor: Colors.black,
+                            data: {"val": 'Hey there'},
+                          ).toJsonObject(),
+                        }));
 
-                      /// hashtag from button
-                      EmbeddableM.fromJson({
-                        'hashtag': HashTagObject(
-                          tagTitle: "${index++}",
-                          bgColor: getbankColor(),
-                          textColor: Colors.black,
-                          data: {"val": 'Hey there'},
-                        ).toJsonObject(),
-                      }));
+                    /// Append space to the end
+                    editorController?.document
+                        .insert(editorController.selection.start + 2, " ");
 
-                  /// Append space to the end
-                  editorController?.document
-                      .insert(editorController.selection.start + 2, " ");
+                    editorController?.moveCursorToPosition(
+                        editorController.selection.start + 3);
+                  } else {
 
-                  editorController?.moveCursorToPosition(
-                      editorController.selection.start + 3);
+
+
+
+
+                    int start = editorController?.selection.start ?? 0;
+
+                    int len = editorController!.selection.end -
+                        editorController.selection.start;
+
+                    /// Append space to the start
+                    editorController.document
+                        .insert(editorController.selection.start , " ");
+
+                    editorController.document.replace(
+                        start + 1,
+                        len,
+
+                        /// hashtag from click on text
+                        EmbeddableM.fromJson({
+                          'hashtag': HashTagObject(
+                              bgColor: getbankColor(),
+                              textColor: Colors.black,
+                              tagTitle: extractText(
+                                  editorController, start + 1, len))
+                              .toJsonObject(),
+                        }));
+                    /// Append space to the end
+                    editorController.document
+                        .insert(editorController.selection.start + 2, " ");
+
+                    editorController.moveCursorToPosition(
+                        editorController.selection.start + 3);
+                  }
+
                 });
               })
         ],
       );
 
+  extractText(EditorController editorController, start, len) {
+    editorController.document.toDelta().toList().map((e) {
+      print("$e");
+      return e;
+    });
+    return editorController.document.getPlainText(start, len);
+  }
+
   Future<void> _loadDocument() async {
-    // final result = await rootBundle.loadString(
-    //   'assets/docs/custom-embeded.json',
-    // );
-    // final document = DocumentM.fromJson(jsonDecode(result));
-     final document = DocumentM();
+    final result = await rootBundle.loadString(
+      'assets/docs/custom-embeded.json',
+    );
+    final document = DocumentM.fromJson(jsonDecode(result));
+    // final document = DocumentM();
     setState(() {
       _controller = EditorController(
         document: document,
@@ -146,7 +191,6 @@ class _CustomEmbededPageState extends State<CustomEmbededPage> {
     Colors.cyanAccent,
     Colors.purpleAccent,
     Colors.pinkAccent,
-    Colors.black
   ];
 
   getbankColor() {

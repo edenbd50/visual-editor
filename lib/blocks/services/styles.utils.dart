@@ -104,6 +104,12 @@ EditorStylesM getDefaultStyles(BuildContext context) {
       color: themeData.colorScheme.secondary,
       decoration: TextDecoration.underline,
     ),
+    tag: TextStyle(
+        background: Paint()
+          ..color = Colors.redAccent
+          ..style = PaintingStyle.stroke
+          ..strokeJoin = StrokeJoin.round,
+    ),
     placeHolder: TextBlockStyleM(
       defaultTextStyle.style.copyWith(
         fontSize: 20,

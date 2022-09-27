@@ -73,3 +73,73 @@ class LinkDialogState extends State<LinkDialog> {
     Navigator.pop(context, _link.trim());
   }
 }
+
+class TagDialog extends StatefulWidget {
+  final EditorDialogThemeM? dialogTheme;
+  final String? tag;
+
+  const TagDialog({
+    this.dialogTheme,
+    this.tag,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  TagDialogState createState() => TagDialogState();
+}
+
+class TagDialogState extends State<TagDialog> {
+  late String _tag;
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _tag = widget.tag ?? '';
+    _controller = TextEditingController(
+      text: _tag,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: widget.dialogTheme?.dialogBackgroundColor,
+      content: TextField(
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
+        style: widget.dialogTheme?.inputTextStyle,
+        decoration: InputDecoration(
+          labelText: 'Paste a tag'.i18n,
+          labelStyle: widget.dialogTheme?.labelTextStyle,
+          floatingLabelStyle: widget.dialogTheme?.labelTextStyle,
+        ),
+        autofocus: true,
+        onChanged: _tagChanged,
+        controller: _controller,
+      ),
+      actions: [
+        TextButton(
+          onPressed: _tag.isNotEmpty &&
+              AutoFormatMultipleTagRule.tagRegExp.hasMatch(_tag)
+              ? _applyTag
+              : null,
+          child: Text(
+            'Ok'.i18n,
+            style: widget.dialogTheme?.labelTextStyle,
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _tagChanged(String value) {
+    setState(() {
+      _tag = value;
+    });
+  }
+
+  void _applyTag() {
+    Navigator.pop(context, _tag.trim());
+  }
+}
