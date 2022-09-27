@@ -128,7 +128,16 @@ class _TextLineState extends State<TextLine> {
   RichTextProxy _richTextProxy(BuildContext context) {
     final textSpan = _textSpanForWholeLine(context);
     final strutStyle = StrutStyle.fromTextStyle(textSpan.style!);
-    final textAlign = _textLineStylesUtils.getTextAlign(widget.line);
+    var textAlign = _textLineStylesUtils.getTextAlign(widget.line);
+
+    ///
+    if(widget.textDirection == TextDirection.rtl){
+      if(textAlign == TextAlign.end){
+        textAlign = TextAlign.start;
+      }else if(textAlign == TextAlign.start){
+        textAlign = TextAlign.end;
+      }
+    }
 
     return RichTextProxy(
       textStyle: textSpan.style!,

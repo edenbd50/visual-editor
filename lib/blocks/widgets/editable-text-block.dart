@@ -106,6 +106,7 @@ class EditableTextBlock extends StatelessWidget {
 
     for (final line in Iterable.castFrom<dynamic, LineM>(block.children)) {
       index++;
+      final nodeTextDirection = getDirectionOfNode(line);
 
       final editableTextLine = EditableTextLine(
         line: line,
@@ -118,7 +119,7 @@ class EditableTextBlock extends StatelessWidget {
         ),
         body: TextLine(
           line: line,
-          textDirection: textDirection,
+          textDirection: nodeTextDirection,
           styles: styles,
           linkActionPicker: linkActionPicker,
           state: _state,
@@ -138,8 +139,7 @@ class EditableTextBlock extends StatelessWidget {
         state: _state,
       );
 
-      final nodeTextDirection = getDirectionOfNode(line);
-
+      print('here');
       children.add(
         Directionality(
           textDirection: nodeTextDirection,
