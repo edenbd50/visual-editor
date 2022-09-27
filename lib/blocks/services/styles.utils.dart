@@ -107,7 +107,7 @@ EditorStylesM getDefaultStyles(BuildContext context) {
     tag: TextStyle(
         background: Paint()
           ..color = Colors.redAccent
-          ..style = PaintingStyle.stroke
+          ..style = PaintingStyle.fill
           ..strokeJoin = StrokeJoin.round,
     ),
     placeHolder: TextBlockStyleM(

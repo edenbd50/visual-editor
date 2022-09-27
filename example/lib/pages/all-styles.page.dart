@@ -60,7 +60,7 @@ class _AllStylesPageState extends State<AllStylesPage> {
             right: 16,
           ),
           child: Directionality(
-            textDirection: TextDirection.ltr,
+            textDirection: TextDirection.rtl,
             child: VisualEditor(
               controller: _controller!,
               scrollController: ScrollController(),
@@ -125,7 +125,7 @@ class _AllStylesPageState extends State<AllStylesPage> {
 
   Future<void> _loadDocument() async {
     final result = await rootBundle.loadString(
-      'assets/docs/all-styles.json',
+      'assets/docs/custom-embeded.json',
     );
     final document = DocumentM.fromJson(jsonDecode(result));
     document.setCustomRules([

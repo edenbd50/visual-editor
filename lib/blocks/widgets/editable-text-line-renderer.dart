@@ -727,7 +727,7 @@ class EditableTextLineRenderer extends EditableBoxRenderer {
     PaintingContext context,
     Offset effectiveOffset,
   ) {
-    assert(highlightedRects.isNotEmpty);
+    // assert(highlightedRects.isNotEmpty);
     // final isHovered = _hoveredHighlights.contains(highlight); RESTORE
     const isHovered = false;
     final paint = Paint()

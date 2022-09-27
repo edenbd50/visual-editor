@@ -14,7 +14,7 @@ final SAMPLE_HIGHLIGHTS = [
         // print('Leaving highlight 1');
       },
       onSingleTapUp: (_) {
-        // print('Tapped highlight 1');
+        print('Tapped highlight 1 ${_.textSelection}');
       }
   ),
   HighlightM(

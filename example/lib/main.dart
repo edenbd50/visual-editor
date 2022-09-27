@@ -24,7 +24,7 @@ class DemoApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Visual Editor Demo',
-      initialRoute: '/all-styles',
+      initialRoute: '/custom-embeded',
 
       // TODO Add examples for:
       // Custom styles

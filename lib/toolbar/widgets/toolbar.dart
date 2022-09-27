@@ -364,7 +364,7 @@ class EditorToolbar extends StatelessWidget implements PreferredSizeWidget {
             showRightAlignment: showRightAlignment,
             showJustifyAlignment: showJustifyAlignment,
           ),
-        // if (showDirection)
+        if (showDirection)
           ToggleStyleButton(
             attribute: AttributesAliasesM.rtl,
             buttonsSpacing: toolbarSectionSpacing,
