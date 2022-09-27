@@ -30,6 +30,7 @@ class _MarkersPageState extends State<MarkersPage> {
         children: _controller != null
             ? [
                 _editor(),
+                _markersControls(),
                 _toolbar(),
               ]
             : [
@@ -55,9 +56,33 @@ class _MarkersPageState extends State<MarkersPage> {
             controller: _controller!,
             scrollController: ScrollController(),
             focusNode: _focusNode,
-            config: EditorConfigM(),
+            config: EditorConfigM(
+              // Uncomment this param if you want to initialise the editor with the markers turned off.
+              // They can later be re-enabled at runtime via the controller.
+              markersVisibility: true,
+            ),
           ),
         ),
+      );
+
+  Widget _markersControls() => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          OutlinedButton(
+            child: Text('Add Marker'),
+            onPressed: () {
+              _controller?.addMarker('expert');
+            },
+          ),
+          OutlinedButton(
+            child: Text('Toggle Markers'),
+            onPressed: () {
+              final visibility =
+                  !(_controller?.getMarkersVisibility() ?? false);
+              _controller?.toggleMarkers(visibility);
+            },
+          ),
+        ],
       );
 
   Widget _toolbar() => Container(

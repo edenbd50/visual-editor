@@ -3,8 +3,10 @@ import 'dart:math' as math;
 
 import 'package:flutter/services.dart';
 
+import '../../documents/models/attribute-scope.enum.dart';
 import '../../documents/models/attribute.model.dart';
 import '../../documents/models/attributes/attributes.model.dart';
+import '../../documents/models/attributes/marker.model.dart';
 import '../../documents/models/change-source.enum.dart';
 import '../../documents/models/delta/delta-changes.model.dart';
 import '../../documents/models/delta/delta.model.dart';
@@ -12,12 +14,15 @@ import '../../documents/models/document.model.dart';
 import '../../documents/models/nodes/embeddable.model.dart';
 import '../../documents/models/nodes/leaf.model.dart';
 import '../../documents/models/style.model.dart';
+import '../../documents/services/attribute.utils.dart';
 import '../../documents/services/delta.utils.dart';
 import '../../embeds/models/image.model.dart';
 import '../../highlights/models/highlight.model.dart';
 import '../../markers/models/marker-type.model.dart';
+import '../../markers/services/markers.utils.dart';
 import '../../shared/state/editor-state-receiver.dart';
 import '../../shared/state/editor.state.dart';
+import '../../toolbar/widgets/dropdowns/markers-dropdown.dart';
 import '../models/paste-style.model.dart';
 
 // Return false to ignore the event.
@@ -459,6 +464,71 @@ class EditorController {
   void removeAllHighlights(HighlightM highlight) {
     _state.highlights.removeAllHighlights();
     _state.refreshEditor.refreshEditor();
+  }
+
+  // === MARKERS ===
+
+  void addMarker(String markerTypeId) {
+    // Existing markers
+    final style = getSelectionStyle();
+    final styleAttributes = style.values.toList();
+
+    List<MarkerM>? markers = [];
+
+    // Convert from json map to models
+    if (styleAttributes.isNotEmpty) {
+      final markersMap = styleAttributes.firstWhere(
+        (attribute) => attribute.key == AttributesM.markers.key,
+        orElse: () => AttributeM('', AttributeScope.INLINE, null),
+      );
+
+      if (markersMap.key != '') {
+        markers = AttributeUtils.extractMarkersFromAttributeMap(
+          markersMap.value,
+        );
+      }
+    }
+
+    // On Add Callback
+    // Returns the UUIDs or whatever custom data the client app desires
+    // to store inline as a value of hte marker attribute.
+    final markersTypes = _state.markersTypes.types;
+
+    final MarkerTypeM? markerType = markersTypes.firstWhere(
+      (marker) => marker.id == markerTypeId,
+      orElse: () => defaultMarkerType,
+    );
+
+    var data;
+
+    if (markerType != null && markerType.onAddMarkerViaToolbar != null) {
+      data = markerType.onAddMarkerViaToolbar!(markerType);
+    }
+
+    // Add the new marker
+    markers?.add(
+      MarkerM(markerTypeId, data),
+    );
+
+    // Markers are stored as json data in the styles
+    final jsonMarkers = markers?.map((marker) => marker.toJson()).toList();
+
+    // Add to document
+    formatSelection(
+      AttributeUtils.fromKeyValue('markers', jsonMarkers),
+    );
+  }
+
+  void toggleMarkers(bool areVisible) {
+    _state.markersVisibility.toggleMarkers(areVisible);
+  }
+
+  bool getMarkersVisibility() {
+    return _state.markersVisibility.visibility;
+  }
+
+  List<MarkerM> getAllMarkers() {
+    return MarkersUtils.getAllMarkersFromDoc(_state.document.document);
   }
 
   // === PRIVATE ===
